@@ -23,7 +23,6 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#1f1f1f'
     },
 
     image: {
@@ -34,15 +33,15 @@ const styles = StyleSheet.create({
 
     title: {
         fontWeight: '900',
-        fontSize: 28,
+        fontSize: 30,
         marginBottom: 10,
-        color: '#ffa500',
-        textAlign: 'center'
+        color: '#9D02FC',
+        textAlign: 'center',
     },
 
     description: {
         fontWeight: '300',
-        color: '#7a7a7a',
+        color: '#858585',
         textAlign: 'center',
         paddingHorizontal: 64,
     }

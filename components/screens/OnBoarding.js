@@ -1,12 +1,14 @@
 // Built in Imports
 import React from 'react';
 import { useState, useRef } from 'react';
-import { View, Text, StyleSheet, FlatList, Animated } from 'react-native';
+import { View, StyleSheet, FlatList, Animated } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 
 // Custom imports
-import slides from '../components/slides';
-import Paginator from '../components/Paginator';
-import OnboardingItem from '../components/OnboardingItem';
+import slides from './slides';
+import Paginator from './Paginator';
+import NextButton from './NextButton';
+import OnboardingItem from './OnboardingItem';
 
 // Handles the Onboarding screens at the first launch of the app
 export default OnBoarding = () => {
@@ -21,6 +23,20 @@ export default OnBoarding = () => {
 
     const viewconfig = useRef({ viewAreaCoveragePercentThreshold: 50 }).current;
 
+    const scrollTo = async () => {
+        if (currentIndex < slides.length - 1) {
+            slidesRef.current.scrollToIndex({
+                index: currentIndex + 1
+            })
+        } else {
+            try {
+                await AsyncStorage.setItem('@viewedOnboarding', 'true')
+            } catch (err) {
+                console.log('Error @setItem', err);
+            }
+        }
+    };
+
     return (
         <View style={styles.container}>
             <View style={{ flex: 3 }}>
@@ -28,7 +44,7 @@ export default OnBoarding = () => {
                     data={slides}
                     renderItem={({ item }) => <OnboardingItem item={item} />}
                     horizontal
-                    showsHorizontalScrollIndicator
+                    showsHorizontalScrollIndicator={false}
                     pagingEnabled
                     bounces={false}
                     keyExtractor={(item) => item.id}
@@ -41,8 +57,8 @@ export default OnBoarding = () => {
                     ref={slidesRef}
                 />
             </View>
-
-            <Paginator data={slides} />
+            <Paginator data={slides} scrollX={scrollx} />
+            <NextButton scrollTo={scrollTo} percentage={(currentIndex + 1) * (100 / slides.length)} />
         </View>
     );
 };
@@ -52,5 +68,6 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
+        backgroundColor: '#ffffff',
     },
 });
